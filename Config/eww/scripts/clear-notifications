@@ -1,0 +1,14 @@
+#!/bin/bash
+# A script to clear the notification history file and update EWW.
+# Maintained by humanwhodebugs
+
+# Path to the JSON file for notification history
+HISTORY_FILE="$HOME/.config/dunst/history.json"
+# Path to your eww binary
+EWW_BIN="$HOME/.local/bin/eww"
+
+# Overwrite the history file with an empty JSON array
+echo "[]" > "$HISTORY_FILE"
+
+# Directly tell EWW to update its variable with an empty list
+${EWW_BIN} update 'notifications={"notifications": []}'

@@ -1,0 +1,32 @@
+#!/bin/bash
+# A script for eww to fetch task statistics from taskwarrior.
+# Maintained by humanwhodebugs
+
+# Function: Fetches task counts and generates a JSON output for EWW.
+# - Gathers pending tasks and tasks completed today.
+# - Calculates total tasks and completion percentage.
+# - Outputs data in a JSON format.
+generate_json() {
+  # Get the count of pending tasks
+  PENDING=$(task count status:pending)
+
+  # Get the count of tasks completed today
+  COMPLETED_TODAY=$(task count status:completed end:today)
+
+  # Calculate the total number of tasks for the day
+  TOTAL=$((PENDING + COMPLETED_TODAY))
+
+  # Calculate the percentage of completed tasks
+  PERCENTAGE=0
+  if [ "$TOTAL" -gt 0 ]; then
+    PERCENTAGE=$((COMPLETED_TODAY * 100 / TOTAL))
+  fi
+
+  # Output in JSON format for EWW
+  echo "{\"completed\": $COMPLETED_TODAY, \"total\": $TOTAL, \"percentage\": $PERCENTAGE}"
+}
+
+# Main execution
+generate_json
+
+exit 0

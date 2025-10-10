@@ -1,0 +1,65 @@
+#!/bin/sh
+# A script for eww (elkowar's wacky widget) to display battery icon and percentage.
+# Maintained by humanwhodebugs
+
+# Path to the battery information directory
+BAT_PATH="/sys/class/power_supply/BAT0/"
+
+# Current battery percentage (0–100)
+PERCENTAGE="$(cat "${BAT_PATH}/capacity")"
+
+# Function: Displays a battery icon based on current charge level
+# - If charging, icon is omitted
+# - If discharging, selects icon based on charge percentage
+# - Sends a critical notification if battery is low
+icon() {
+  if [ "$(cat "${BAT_PATH}/status")" = "Charging" ]; then
+    echo Ϟ
+    exit 0
+  fi
+
+  if [ "$PERCENTAGE" -gt "90" ]; then
+    icon="󰁹" # Battery level > 90%
+  elif [ "$PERCENTAGE" -gt "80" ]; then
+    icon="󰂂" # Battery level > 80%
+  elif [ "$PERCENTAGE" -gt "70" ]; then
+    icon="󰂁" # Battery level > 70%
+  elif [ "$PERCENTAGE" -gt "60" ]; then
+    icon="󰂀" # Battery level > 60%
+  elif [ "$PERCENTAGE" -gt "50" ]; then
+    icon="󰁿" # Battery level > 50%
+  elif [ "$PERCENTAGE" -gt "40" ]; then
+    icon="󰁽" # Battery level > 40%
+  elif [ "$PERCENTAGE" -gt "30" ]; then
+    icon="󰁼" # Battery level > 30%
+  elif [ "$PERCENTAGE" -gt "20" ]; then
+    icon="󰁻" # Battery level > 20%
+  elif [ "$PERCENTAGE" -gt "10" ]; then
+    icon="󰁺" # Battery level > 10%
+    notify-send -u critical "Battery Low" "Connect Charger"
+  elif [ "$PERCENTAGE" -gt "0" ]; then
+    icon="󰂎" # Battery level > 0%
+    notify-send -u critical "Battery Low" "Connect Charger"
+  else
+    echo "󱃍" # Battery empty or unreadable
+    exit 0
+  fi
+
+  echo "$icon"
+}
+
+# Function: Outputs the battery percentage as a number
+percent() {
+  echo "$PERCENTAGE"
+}
+
+# Argument check: calls the appropriate function
+if [ "$1" = "icon" ]; then
+  icon
+  exit 0
+elif [ "$1" = "percent" ]; then
+  percent
+  exit 0
+fi
+
+exit 0

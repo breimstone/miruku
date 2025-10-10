@@ -1,0 +1,86 @@
+{
+  "players": [
+    "org.mpris.MediaPlayer2.mpv"
+  ],
+  "debug": false,
+  "keybinds": {
+    "esc;q": "quit()",
+    "h": "prev()",
+    "l": "next()",
+    " ": "play_pause()",
+    "-": "volume(-5)",
+    "+": "volume(+5)",
+    "left": "backward(2500)",
+    "right": "forward(2500)"
+  },
+  "width": 22,
+  "height": 10,
+  "layout": [
+    {
+      "type": "container",
+      "direction": "horizontal",
+      "children": [
+        {
+          "type": "container",
+          "direction": "vertical",
+          "width": 20,
+          "children": [
+            {
+              "type": "label",
+              "text": "$title"
+            },
+            {
+              "type": "cover-art"
+            },
+            {
+              "type": "progress",
+              "progress": {
+                "char": "󰝤"
+              },
+              "empty": {
+                "char": "󰁱"
+              }
+            }
+          ]
+        },
+        {
+          "type": "empty",
+          "size": 1
+        },
+        {
+          "type": "container",
+          "direction": "vertical",
+          "children": [
+            {
+              "type": "empty",
+              "size": 1
+            },
+            {
+              "type": "button",
+              "text": "󰒮",
+              "action": "prev()"
+            },
+            {
+              "type": "empty",
+              "size": 1
+            },
+            {
+              "type": "button",
+              "text": "$status-icon",
+              "action": "play_pause()"
+            },
+            {
+              "type": "empty",
+              "size": 1
+            },
+            {
+              "type": "button",
+              "text": "󰒭",
+              "action": "next()"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+#!/bin/bash
+# A script for capturing screenshots with eww integration
+# Maintained by humanwhodebugs
+
+# Directory to store screenshots
+SCREENSHOTS_DIR="$HOME/Pictures/Screenshots"
+# Path to eww binary
+EWW_BIN="$HOME/.local/bin/eww"
+# Lock file for screenshot window
+LOCK_FILE="$HOME/.cache/eww-screenshot.lock"
+
+# Function: Close the screenshot widget
+close_widget() {
+  ${EWW_BIN} close screenshot
+  rm -f "$LOCK_FILE"
+}
+
+# Function: Generate unique timestamped filename for screenshots
+generate_filename() {
+  TIME=$(date +%Y-%m-%d-%H-%M-%S)
+  echo "$SCREENSHOTS_DIR/Screenshot-${TIME}.png"
+}
+
+# Function: Copy screenshot to clipboard and notify user
+copy_to_clipboard() {
+  local file="$1"
+  if [[ -s "$file" ]]; then
+    # Copy existing file to clipboard
+    xclip -selection clipboard -t image/png -i "$file"
+    notify-send -t 2000 "Screenshot" "Screenshot taken and copied to clipboard."
+  else
+    # Notify if screenshot failed
+    notify-send -t 2000 "Screenshot" "Screenshot failed or cancelled."
+  fi
+}
+
+# Function: Capture entire desktop
+capture_desktop() {
+  # Ensure screenshots directory exists
+  mkdir -p "$SCREENSHOTS_DIR"
+  filename=$(generate_filename)
+  (
+    # Close widget first, then take screenshot
+    close_widget
+    sleep 0.7
+    maim "$filename"
+    copy_to_clipboard "$filename"
+  ) &
+}
+
+# Function: Capture selected area
+capture_area() {
+  # Ensure screenshots directory exists
+  mkdir -p "$SCREENSHOTS_DIR"
+  filename=$(generate_filename)
+  (
+    # Close widget first, then take screenshot
+    close_widget
+    sleep 0.7
+    maim -s "$filename"
+    copy_to_clipboard "$filename"
+  ) &
+}
+
+# Handle passed arguments
+case "$1" in
+"--area")
+  capture_area
+  ;;
+"--desktop")
+  capture_desktop
+  ;;
+*)
+  # Display usage if no valid argument is provided
+  echo "Usage: $0 {--area|--desktop}"
+  exit 1
+  ;;
+esac

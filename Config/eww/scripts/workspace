@@ -1,0 +1,60 @@
+#!/bin/bash
+# A script to get workspace information for bspwm with eww integration
+# Maintained by humanwhodebugs
+
+# Function: Generate workspace information in JSON format for eww
+workspaces() {
+  # Get all workspace names and focused workspace
+  WORKSPACES=$(bspc query -D --names)
+  FOCUSED_WS=$(bspc query -D -d focused --names)
+
+  # Define icons (this array is no longer used for focused workspace)
+  ICONS=("●" "●" "●" "●" "●" "●")
+
+  # Begin JSON array output
+  echo -n "["
+  i=0
+
+  # Loop through each workspace
+  for ws in $WORKSPACES; do
+    # Check if workspace is focused
+    if [ "$ws" = "$FOCUSED_WS" ]; then
+      CURRENT="true"
+    else
+      CURRENT="false"
+    fi
+
+    # Check if workspace is occupied (has windows)
+    OCCUPIED=$(bspc query -N -d "$ws" | wc -l)
+    if [ "$OCCUPIED" -gt 0 ]; then
+      OCCUPIED_STATUS="true"
+    else
+      OCCUPIED_STATUS="false"
+    fi
+
+    # Set the icon
+    if [ "$CURRENT" = "true" ]; then
+      ICON="󰮯" # Focused workspace
+    elif [ "$OCCUPIED_STATUS" = "true" ]; then
+      ICON="󰊠" # Occupied but not focused
+    else
+      ICON="●" # Empty workspace
+    fi
+
+    # Output JSON object
+    echo -n "{\"id\": \"$ws\", \"icon\": \"$ICON\", \"current\": $CURRENT, \"occupied\": $OCCUPIED_STATUS}"
+
+    # Add comma separator between workspaces (except after the last one)
+    if [ "$ws" != "$(echo $WORKSPACES | awk '{print $NF}')" ]; then
+      echo -n ", "
+    fi
+
+    i=$((i + 1))
+  done
+
+  # Close JSON array
+  echo "]"
+}
+
+# Execute the function to output workspace info
+workspaces

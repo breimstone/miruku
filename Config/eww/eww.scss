@@ -1,0 +1,548 @@
+// ============================================
+// Catppuccin Latte - Color Variables
+// ============================================
+$base: #eff1f5;
+$blue: #1e66f5;
+$crust: #dce0e8;
+$flamingo: #dd7878;
+$green: #40a02b;
+$lavender: #7287fd;
+$mantle: #e6e9ef;
+$maroon: #e64553;
+$mauve: #8839ef;
+$overlay0: #9ca0b0;
+$overlay1: #8c8fa1;
+$overlay2: #7c7f93;
+$peach: #fe640b;
+$pink: #ea76cb;
+$red: #d20f39;
+$rosewater: #dc8a78;
+$sapphire: #209fb5;
+$sky: #04a5e5;
+$subtext0: #6c6f85;
+$subtext1: #5c5f77;
+$surface0: #ccd0da;
+$surface1: #bcc0cc;
+$surface2: #acb0be;
+$teal: #179299;
+$text: #4c4f69;
+$yellow: #df8e1d;
+
+// ============================================
+// Global Styles
+// ============================================
+* {
+  all: unset;
+  font-family: "Iosevka Term Medium";
+}
+
+// ============================================
+// Bar Icons
+// ============================================
+.bat {
+  color: $mantle;
+  font-size: 22px;
+  padding-left: 1px;
+  padding-bottom: 2px;
+}
+
+.brightness-icon {
+  color: $mantle;
+  font-size: 20px;
+  padding-right: 4px;
+}
+
+.logout-icon {
+  font-size: 19px;
+  font-weight: bold;
+  padding-left: 2px;
+}
+
+.music-icon {
+  padding-right: 4px;
+}
+
+.profile-icon {
+  color: $text;
+  font-size: 20px;
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+.reboot-icon {
+  font-size: 21px;
+  padding-left: 2px;
+}
+
+.restart-icon {
+  font-size: 22px;
+  padding-right: 3px;
+}
+
+.screenrecord-icon {
+  font-size: 18px;
+}
+
+.screenshot-icon {
+  font-size: 18px;
+  padding-bottom: 3px;
+}
+
+.shutdown-icon {
+  font-size: 20px;
+  padding-right: 3px;
+}
+
+.volume-icon {
+  color: $mantle;
+  font-size: 17px;
+  padding-right: 2px;
+  padding-bottom: 2px;
+}
+
+.wifi-icon {
+  color: $mantle;
+  font-size: 17px;
+  padding-right: 5px;
+}
+
+// ============================================
+// Calendar Widget
+// ============================================
+.cal-box {
+  background-color: $surface2;
+  border-radius: 6px;
+  color: $text;
+  font-size: 14px;
+  font-weight: bold;
+  .cal-inner-box {
+    padding: 0.2rem 0.2rem 0.2rem;
+    .cal {
+      padding: 0.4rem 0.25rem 0rem;
+      &.highlight {
+        padding: 0rem;
+      }
+    }
+  }
+}
+
+calendar {
+  color: $mantle;
+  &.header {
+    color: $text;
+    font-weight: bold;
+  }
+  &.button {
+    color: $text;
+  }
+  &.highlight {
+    color: $text;
+    font-weight: bold;
+  }
+  &:selected {
+    color: $blue;
+  }
+  &:indeterminate {
+    color: $text;
+  }
+  day {
+    color: $text;
+  }
+}
+
+// ============================================
+// Container Elements
+// ============================================
+.bar {
+  background-color: $base;
+  border-radius: 6px;
+}
+
+.powermenu {
+  color: $text;
+  padding-bottom: 9px;
+  padding-top: 5px;
+}
+
+.tray {
+  padding-left: 1px;
+}
+
+// ============================================
+// Menu & Tooltip
+// ============================================
+menu {
+  background-color: $surface2;
+  color: $text;
+  font-size: 13px;
+  padding: 5px;
+  menuitem {
+    border-radius: 6px;
+    padding: 8px 12px;
+    &:hover {
+      background-color: $blue;
+    }
+  }
+  separator {
+    background-color: $text;
+    padding-top: 1px;
+    &:last-child {
+      padding: unset;
+    }
+  }
+}
+
+tooltip {
+  background-color: $surface2;
+  color: $text;
+}
+
+// ============================================
+// Music Player Widget
+// ============================================
+.album_art {
+  background-repeat: no-repeat;
+  background-size: 90px;
+  margin-left: 10px;
+  min-height: 90px;
+  min-width: 90px;
+}
+
+.music-artist {
+  font-size: 14px;
+}
+
+.musicbox {
+  margin: 0px 0px 0px 4px;
+}
+
+.musicbuttons {
+  background-color: $mantle;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.music-progress > trough {
+  background-color: $surface2;
+  border-radius: 6px;
+  min-width: 50px;
+}
+
+.music-progress > trough > progress {
+  background-color: $text;
+  border-radius: 6px;
+}
+
+.music-title {
+  font-size: 14px;
+}
+
+.musicplayer {
+  background-color: $mantle;
+  border-radius: 6px;
+  padding: 8px 2px;
+}
+
+.playbutton {
+  background-repeat: no-repeat;
+  background-size: 20px;
+  margin-left: 2px;
+  min-height: 24px;
+  min-width: 24px;
+}
+
+.progress-container {
+  min-width: 120px;
+  padding: 8px;
+}
+
+.trackbutton {
+  background-repeat: no-repeat;
+  background-size: 20px;
+  margin-left: 2px;
+  min-height: 24px;
+  min-width: 24px;
+}
+
+// ============================================
+// Notification and Profile Widget
+// ============================================
+.avatar {
+  background-size: cover;
+  border-radius: 6px;
+  min-height: 143px;
+}
+
+.clear-button {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.notif-body {
+  font-size: 14px;
+}
+
+.notification-body {
+  font-size: 14px;
+}
+
+.notif-box {
+  padding: 8px 3px;
+}
+
+.notif-header {
+  background-color: $mantle;
+  border-radius: 6px 6px 0px 0px;
+  padding: 6px 8px;
+}
+
+.notification-header {
+  font-size: 14px;
+  padding: 0px 5px;
+}
+
+.notif-icon {
+  background-size: cover;
+  min-width: 35px;
+  min-height: 35px;
+}
+
+.notification-icon {
+  background-size: cover;
+  min-width: 45px;
+  min-height: 45px;
+  padding: 4px;
+}
+
+.notif-item {
+  border-radius: 6px;
+  color: $text;
+  padding: 4px 5px;
+}
+
+.notification-item {
+  background-color: $surface2;
+  border-radius: 6px;
+  padding: 9px 10px;
+}
+
+.notif-name {
+  color: $text;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.notif-popup {
+  background-color: $surface2;
+  border-radius: 6px;
+}
+
+.notification-section {
+  background-color: $surface2;
+  border-radius: 6px;
+  color: $text;
+  padding: 15px;
+}
+
+.notif-title {
+  color: $text;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.notification-title {
+  color: $text;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.notif-time {
+  color: $text;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notification-time {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notifications-container {
+  background-color: $mantle;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.notifications-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.panel-bg {
+  background-color: $mantle;
+  border-radius: 6px;
+  font-size: 14px;
+  padding: 8px;
+}
+
+.profile-day {
+  color: $text;
+  font-size: 14px;
+}
+
+.profile-month {
+  color: $text;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.stat-bar {
+  padding-bottom: 8px;
+  padding-top: 8px;
+  trough {
+    background-color: $surface2;
+    border-radius: 5px;
+    min-height: 171px;
+    min-width: 6px;
+  }
+  progress {
+    border-radius: 5px;
+    min-width: 6px;
+  }
+}
+
+.stat-bar-1 progress {
+  background-color: #6791c9;
+}
+
+.stat-bar-2 progress {
+  background-color: #bc83e3;
+}
+
+.stat-bar-3 progress {
+  background-color: #67afc1;
+}
+
+.stat-bar-4 progress {
+  background-color: #78b892;
+}
+
+.todo-count {
+  padding-top: 16px;
+}
+
+.todo-done {
+  font-size: 30px;
+}
+
+.todo-progress {
+  background-color: $surface2;
+  color: $text;
+}
+
+.todo-progress-container {
+  min-height: 85px;
+  min-width: 85px;
+  padding: 12px;
+}
+
+.weather-icon {
+  font-size: 66px;
+  padding-right: 28px;
+}
+
+.weather-panel {
+  min-height: 126px;
+}
+
+// ============================================
+// Scale Elements
+// ============================================
+.bribar trough highlight {
+  background-color: $mantle;
+  border-radius: 6px;
+}
+
+scale trough {
+  all: unset;
+  background-color: $text;
+  border-radius: 6px;
+  margin-left: 2px;
+  min-height: 80px;
+  min-width: 9px;
+}
+
+.volbar trough highlight {
+  background-color: $mantle;
+  border-radius: 6px;
+}
+
+// ============================================
+// Screenrecord and Screenshot Widget
+// ============================================
+.screen-button {
+  background-color: $mantle;
+  border-radius: 6px;
+  color: $text;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.screen-text {
+  color: $text;
+  font-weight: bold;
+}
+
+.screenshot {
+  background-color: $surface2;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.screenrecord {
+  background-color: $surface2;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+// ============================================
+// UI Elements
+// ============================================
+.control {
+  background-color: $surface2;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+.time {
+  background-color: $surface2;
+  border-radius: 6px;
+  color: $mantle;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 5px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
+
+// ============================================
+// Workspace Controls
+// ============================================
+.workspaces {
+  background-color: $surface2;
+  border-radius: 6px;
+  color: $mantle;
+  font-size: 20px;
+  margin: 5px;
+  padding: 2px;
+  button {
+    &.current {
+      padding-right: 3px;
+    }
+    &.occupied {
+      color: $text;
+      font-size: 19px;
+      padding-right: 3px;
+    }
+  }
+}

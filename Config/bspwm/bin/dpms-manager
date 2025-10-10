@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set_dpms() {
+  if [ "$(cat /sys/class/power_supply/AC/online)" -eq "1" ]; then
+    # If laptop is charging
+    xset dpms 0 0 0 # Nonactive timeout
+    xset s off      # Nonactive screensaver
+  else
+    # If laptop discharged
+    xset dpms 600 600 600 # Timeout 600s
+    xset s 600            # Screensaver 600s
+  fi
+}
+
+while true; do
+  set_dpms
+  sleep 10 # Check status every 10s
+done
+

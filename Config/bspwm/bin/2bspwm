@@ -1,0 +1,30 @@
+#!/bin/sh
+# Double Borders
+# Needs chwb2 from wmutils/opt
+# Credit to 6gk/polka
+
+outer='0xeff1f5'  # Outer
+inner1='0x4c4f69' # Focused
+inner2='0xacb0be' # Normal
+
+trap 'bspc config border_width 0; kill -9 -$$' INT TERM
+
+targets() {
+  case $1 in
+  focused) bspc query -N -n .local.focused.\!fullscreen ;;
+  normal) bspc query -N -n .\!focused.\!fullscreen ;;
+  esac
+}
+bspc config border_width 20
+
+draw() { chwb2 -I "$inner" -O "$outer" -i "3" -o "10" $*; }
+
+{
+  echo
+  bspc subscribe node_geometry node_focus
+} |
+  while read -r _; do
+    [ "$v" ] || v='abcdefg'
+    inner=$inner1 draw $(targets focused)
+    inner=$inner2 draw $(targets normal)
+  done

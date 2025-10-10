@@ -1,0 +1,228 @@
+Arch Linux Installation and Configuration Guide
+
+INSTALLATION PROCESS
+
+1. Connect to Internet
+iwctl
+station wlan0 connect [WLAN_NAME]
+
+After connecting, type `clear` and then `exit`.
+
+2. Update System Clock
+Test connection first, then type:
+timedatectl
+
+If synchronized, set keymap when installing Arch:
+loadkeys jp106
+
+3. Disk Partitioning
+mkfs.ext4 /dev/sda
+fdisk /dev/sda
+
+Create partitions as follows:
+- 60GB for root
+- 8GB for swap
+- Rest for home
+
+Format partitions:
+mkfs.ext4 /dev/sda1
+mkswap /dev/sda2
+swapon /dev/sda2
+mkfs.ext4 /dev/sda3
+
+Mount partitions:
+mount /dev/sda1 /mnt
+mkdir /mnt/home
+mount /dev/sda3 /mnt/home
+
+4. Install Essential Packages
+pacstrap -K /mnt base linux-firmware linux-lts (or linux-zen) base-devel git grub sudo vim intel-ucode thermald tlp networkmanager
+
+5. Generate Fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+
+6. Chroot
+arch-chroot /mnt
+
+7. Set Time Zone
+ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+hwclock --systohc
+
+8. Localization
+Edit `/etc/locale.gen` and uncomment `en_US.UTF-8 UTF-8`, then generate locales:
+locale-gen
+
+Create `/etc/locale.conf`:
+LANG=en_US.UTF-8
+
+Set keyboard layout in `/etc/vconsole.conf`:
+KEYMAP=jp106
+
+9. Network Configuration
+Create hostname file `/etc/hostname`:
+archlinux
+
+10. Root Password and User Creation
+Set root password:
+passwd
+
+Create new user:
+useradd -m -G wheel -s /bin/bash rei
+passwd rei
+
+11. Enable sudo for Non-Root User
+EDITOR=vim visudo
+
+Search for `%wheel` and uncomment:
+%wheel ALL=(ALL:ALL) ALL
+
+12. Enable 32-bit Support and Adding ArchLinuxCN Repository
+Edit `/etc/pacman.conf` and uncomment:
+[multilib]
+Include= /etc/pacman.d/mirrorlist
+
+And add this to the end of file:
+[archlinuxcn]
+Server = https://mirrors.aliyun.com/archlinux/$arch
+
+13. Install Bootloader
+grub-install /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+
+14. Enable Services
+systemctl enable thermald
+systemctl enable tlp
+systemctl enable NetworkManager
+
+15. Complete Installation
+exit
+umount -R /mnt
+reboot
+
+POST-INSTALLATION CONFIGURATION
+
+1. Configuring ArchLinuxCN
+
+Sync repo and install keyring:
+sudo pacman -Sy
+sudo pacman -S archlinuxcn-keyring
+
+2. Installing Paru
+Install rustup:
+sudo pacman -S rustup
+rustup install stable
+rustup default stable
+
+Install paru (AUR Helper)
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+
+3. Configuring BSPWM Double Border
+BSPWM Dependencies
+git clone https://github.com/wmutils/opt
+cd opt
+sudo make
+sudo make install
+
+4. Configuring ThinkFan
+REMEMBER to run sensors-detect to avoid race condition:
+sudo sensors-detect
+
+Install ThinkFan
+paru -S thinkfan lm_sensors
+
+Enable manual fan control for ThinkPad:
+echo "options thinkpad_acpi fan_control=1" | sudo tee /etc/modprobe.d/thinkfan.conf
+
+Remove and load the module with new setting:
+sudo modprobe -r thinkpad_acpi
+sudo modprobe thinkpad_acpi fan_control=1
+
+Regenerate initramfs:
+sudo mkinitcpio -P
+
+Copy the thinkfan.conf to /etc/
+sudo cp thinkfan.conf /etc
+
+Then:
+Enable thinkfan automatically on startup:
+systemctl enable thinkfan
+
+Start the service now:
+systemctl start thinkfan
+
+Check if thinkfan is running properly:
+systemctl status thinkfan
+
+5. SSH Setup
+chmod 600 ~/.ssh/id_ed*
+chmod 700 ~/.ssh
+
+6. Git Configuration
+git config --global user.name "Muhammad Rifai"
+git config --global user.email "humanwhodebugs@gmail.com"
+
+7. Change Folder Icons
+papirus-folders -t Papirus -C cat-latte-sky
+
+8. TLP Power Management Setup
+Edit `/etc/tlp.conf`:
+vim /etc/tlp.conf
+
+Uncomment:
+CPU_SCALING_GOVERNOR_ON_BAT=powersave
+CPU_SCALING_GOVERNOR_ON_AC=performance
+
+Restart service:
+systemctl restart tlp
+
+9. Kernel Configuration
+Edit GRUB defaults:
+sudo nano /etc/default/grub
+
+Update kernel parameters:
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet rd.system.show_status=auto rd.udev.log_priority=3 mitigations=off noibrs noibpb nopti nospectre_v2 l1tf=off zswap.enabled=1 zswap.compressor=lz4 zswap.max_pool_percent=30 elevator=none io_uring=1"
+
+Update GRUB and reboot:
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+reboot
+
+10. Wine Gaming Setup
+Make wine prefix with 64-bit architecture:
+WINEARCH=win64 WINEPREFIX=~/Wine winecfg
+
+Disable gstreamer and winegstreamer since it doesn't play well with Wine.
+
+Install lavfilters:
+WINEPREFIX=~/Wine winetricks -q lavfilters
+
+11. Git Repository Cloning
+git clone git@github.com:humanwhodebugs/repo-name.git
+
+12. System Boot Optimization
+
+Check boot time:
+systemd-analyze blame
+
+Optimize journal:
+sudo vim /etc/systemd/journald.conf
+
+Edit to:
+Storage=volatile
+
+Restart journal:
+sudo systemctl restart systemd-journald
+
+Optimize mount options in `/etc/fstab`:
+sudo vim /etc/fstab
+
+Change:
+UUID=xxxxx  /      ext4  rw,realtime  0 1
+UUID=xxxxx  /home  ext4  rw,realtime  0 2
+
+To:
+UUID=xxxxx  /      ext4  rw,noatime  0 1
+UUID=xxxxx  /home  ext4  rw,noatime  0 2
+
+Reboot to apply changes.

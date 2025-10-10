@@ -1,0 +1,120 @@
+#!/bin/bash
+# A script for eww (elkowar's wacky widget) to handle music playback info and controls via MPD.
+# Maintained by humanwhodebugs
+
+# Path to save the music cover image
+COVER="/tmp/.music_cover.jpg"
+
+# Directory containing music files
+MUSIC_DIR="$HOME/Music"
+
+# MPD port used for controlling music
+PORT=6601
+
+# Current MPD playback status (e.g., playing, paused, stopped)
+STATUS="$(mpc -p $PORT status)"
+
+# Function: Extract and return the album cover of the currently playing track
+get_cover() {
+  local current_file="$(mpc -p $PORT current -f %file%)"
+  ffmpeg -i "${MUSIC_DIR}/${current_file}" "${COVER}" -y &>/dev/null
+
+  if [ $? -eq 0 ]; then
+    echo "$COVER"
+  else
+    echo "icons/music/default.png"
+  fi
+}
+
+# Function: Output the current playback progress percentage (0–100)
+get_progress() {
+  if [[ "$STATUS" == *"[stopped]"* ]]; then
+    echo 0
+    return
+  fi
+
+  echo "$STATUS" | sed -n '2p' | awk -F '[()%]' '{gsub(/ /, "", $2); print $2}'
+}
+
+# Function: Run any mpc command with configured port
+run_mpc() {
+  mpc -p $PORT "$@"
+}
+
+# Function: Send notification of the current song with a custom status message
+send_playback_notification() {
+  local status="$1"
+  local song="$(run_mpc current)"
+  notify-send -t 2000 "$status" "$song"
+}
+
+# Main dispatcher for handling different flags
+case "$1" in
+--music-cover)
+  get_cover
+  ;;
+
+--music-progress)
+  get_progress
+  ;;
+
+--music-status)
+  # Output play/pause icon path depending on current playback state
+  if [[ "$STATUS" == *"[playing]"* ]]; then
+    echo "icons/music/pause-button.png"
+  else
+    echo "icons/music/play-button.png"
+  fi
+  ;;
+
+--music-toggle)
+  # Toggle between play and pause, and notify accordingly
+  if [[ "$STATUS" == *"[playing]"* ]]; then
+    run_mpc -q pause
+    send_playback_notification "Paused"
+  else
+    run_mpc -q play
+    if [[ "$STATUS" == *"[paused]"* ]]; then
+      send_playback_notification "Resumed"
+    else
+      send_playback_notification "Now Playing"
+    fi
+  fi
+  ;;
+
+--music-next)
+  # Toggle to the next music
+  run_mpc -q next
+  send_playback_notification "Now Playing"
+  ;;
+
+--music-prev)
+  # Toggle to the previous music
+  run_mpc -q prev
+  send_playback_notification "Now Playing"
+  ;;
+
+--music-artist)
+  # Output current artist or "Offline" if unavailable
+  artist=$(run_mpc --format "%artist%" current)
+
+  if [ -z "$artist" ]; then
+    echo "Offline"
+  else
+    echo -e "$artist"
+  fi
+  ;;
+
+--music-title)
+  # Output current song title or fallback if unavailable
+  title=$(run_mpc --format "%title%" current)
+
+  if [ -z "$title" ]; then
+    echo "No Music"
+  else
+    echo -e "$title"
+  fi
+  ;;
+esac
+
+exit 0

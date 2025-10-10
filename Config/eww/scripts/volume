@@ -1,0 +1,14 @@
+#!/bin/bash
+# A script to get the current volume percentage from the default PulseAudio sink
+# Maintained by humanwhodebugs
+
+# Get the default audio sink
+SINK=$(pactl get-default-sink 2>/dev/null)
+
+if [ -n "$SINK" ]; then
+  # Extract volume percentage value (remove % symbol) if a sink exists
+  pactl get-sink-volume "$SINK" | grep -oP '\d+%' | head -n1 | tr -d '%'
+else
+  # Return 0 if no default sink is available
+  echo 0
+fi

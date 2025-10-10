@@ -1,0 +1,34 @@
+#sidebar-box {
+  margin: 8px;
+  border: var(--border-width) solid var(--tf-border);
+  border-radius: var(--tf-rounding) !important;
+  transition: border-color var(--tf-border-transition);
+  &:hover {
+    border-color: var(--tf-accent) !important;
+  }
+  &::before {
+    color: var(--tf-font-unhovered);
+    content: "tabs";
+    background-color: var(--tf-bg);
+    position: absolute;
+    margin: -12px 12px;
+    padding: 0 4px;
+    font-size: 1.15em;
+    z-index: 1;
+  }
+  &:hover::before {
+    color: var(--tf-accent);
+  }
+}
+
+#sidebar {
+  border-radius: var(--tf-rounding);
+}
+
+#sidebar-header {
+  display: none;
+}
+
+#sidebar-splitter {
+  display: none;
+}

@@ -1,0 +1,125 @@
+#!/bin/sh
+# A script for eww (elkowar's wacky widget) to toggle various eww windows and utilities (calendar, music, notification, etc).
+# Maintained by humanwhodebugs
+
+# Path to eww binary
+EWW_BIN="$HOME/.local/bin/eww"
+
+# Function: Toggle the calendar window
+calendar() {
+  LOCK_FILE="$HOME/.cache/eww-calendar.lock" # Lock file to track calendar visibility
+
+  run() {
+    ${EWW_BIN} open calendar
+  }
+
+  # Start eww daemon if it's not running
+  if [[ ! $(pidof eww) ]]; then
+    ${EWW_BIN} daemon
+    sleep 1
+  fi
+
+  # Open or close the window based on lock file presence
+  if [[ ! -f "$LOCK_FILE" ]]; then
+    touch "$LOCK_FILE"
+    run
+  else
+    ${EWW_BIN} close calendar
+    rm "$LOCK_FILE"
+  fi
+}
+
+# Function: Toggle the notification popup
+notification() {
+  LOCK_FILE="$HOME/.cache/eww-notification.lock" # Lock file for notification window
+
+  run() {
+    ${EWW_BIN} open notification
+  }
+
+  if [[ ! $(pidof eww) ]]; then
+    ${EWW_BIN} daemon
+    sleep 1
+  fi
+
+  if [[ ! -f "$LOCK_FILE" ]]; then
+    touch "$LOCK_FILE"
+    run
+  else
+    ${EWW_BIN} close notification
+    rm "$LOCK_FILE"
+  fi
+}
+
+# Function: Toggle the screen recording control window
+screenrecord() {
+  LOCK_FILE="$HOME/.cache/eww-screenrecord.lock" # Lock file for screenrecord window
+
+  run() {
+    ${EWW_BIN} open screenrecord
+  }
+
+  if [[ ! $(pidof eww) ]]; then
+    ${EWW_BIN} daemon
+    sleep 1
+  fi
+
+  if [[ ! -f "$LOCK_FILE" ]]; then
+    touch "$LOCK_FILE"
+    run
+  else
+    ${EWW_BIN} close screenrecord
+    rm "$LOCK_FILE"
+  fi
+}
+
+# Function: Toggle the screenshot tool window
+screenshot() {
+  LOCK_FILE="$HOME/.cache/eww-screenshot.lock" # Lock file for screenshot window
+
+  run() {
+    ${EWW_BIN} open screenshot
+  }
+
+  if [[ ! $(pidof eww) ]]; then
+    ${EWW_BIN} daemon
+    sleep 1
+  fi
+
+  if [[ ! -f "$LOCK_FILE" ]]; then
+    touch "$LOCK_FILE"
+    run
+  else
+    ${EWW_BIN} close screenshot
+    rm "$LOCK_FILE"
+  fi
+}
+
+# Handle passed argument to trigger specific window or command
+if [ "$1" = "audio" ]; then
+  pavucontrol
+elif [ "$1" = "calendar" ]; then
+  calendar
+elif [ "$1" = "ncmpcpp" ]; then
+  # Close notification if open, then open ncmpcpp in terminal
+  if [[ -f "$HOME/.cache/eww-notification.lock" ]]; then
+    ${EWW_BIN} close notification
+    rm "$HOME/.cache/eww-notification.lock"
+  fi
+  kitty -e ncmpcpp
+elif [ "$1" = "notification" ]; then
+  notification
+elif [ "$1" = "screenrecord" ]; then
+  screenrecord
+elif [ "$1" = "screenshot" ]; then
+  screenshot
+elif [ "$1" = "task" ]; then
+  # Close notification if open, then open taskwarrior in terminal
+  if [[ -f "$HOME/.cache/eww-notification.lock" ]]; then
+    ${EWW_BIN} close notification
+    rm "$HOME/.cache/eww-notification.lock"
+  fi
+  kitty --hold task list
+elif [ "$1" = "wifi" ]; then
+  kitty -e nmtui
+fi

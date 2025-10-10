@@ -1,0 +1,80 @@
+#!/bin/bash
+# A script for handling screen recording functionality with eww integration
+# Maintained by humanwhodebugs
+
+# Directory to store screen recordings
+RECORDINGS_DIR="$HOME/Videos/Screenrecords"
+# File to store recording process ID
+PID_FILE="/tmp/screen_recording.pid"
+# Path to eww binary
+EWW_BIN="$HOME/.local/bin/eww"
+# Lock file for screenrecord window
+LOCK_FILE="$HOME/.cache/eww-screenrecord.lock"
+
+# Function: Close the screen recording widget
+close_widget() {
+  ${EWW_BIN} close screenrecord
+  rm -f "$LOCK_FILE"
+}
+
+# Function: Start screen recording using ffmpeg
+start_record() {
+  # Find next available file number
+  n=1
+  while [[ -e "$RECORDINGS_DIR/screen-recording-$n.mp4" ]]; do
+    ((n++))
+  done
+
+  # Launch ffmpeg screen recording (X11 + PulseAudio)
+  ffmpeg -f pulse -i alsa_output.pci-0000_00_1b.0.analog-stereo.monitor \
+    -f x11grab -framerate 30 -video_size 1366x768 -i :0.0 \
+    -c:v libx264 -preset ultrafast -tune zerolatency -crf 28 \
+    -pix_fmt yuv420p -profile:v baseline -level 3.1 \
+    -c:a aac -b:a 128k \
+    "$HOME/Videos/Screenrecords/screen-recording-$n.mp4" &
+
+  # Save process ID and notify user
+  echo $! >"$PID_FILE"
+  notify-send -t 2000 "Screen Recorder" "Recording started: screen-recording-$n.mp4"
+
+  # Update eww variable and close widget
+  eww update screen_recording=true
+  close_widget
+}
+
+# Function: Stop active screen recording
+stop_record() {
+  if [[ -f "$PID_FILE" ]]; then
+    # Terminate recording process
+    PID=$(cat "$PID_FILE")
+    kill -SIGINT $PID
+    rm "$PID_FILE"
+
+    # Find latest recording and notify user
+    latest_recording=$(ls -t "$RECORDINGS_DIR/screen-recording-"*.mp4 2>/dev/null | head -n 1)
+    notify-send -t 2000 "Screen Recorder" "Recording stopped. Saved to: $latest_recording"
+
+    # Update eww variable
+    eww update screen_recording=false
+  else
+    notify-send -t 2000 "Screen Recorder" "No active recording found"
+  fi
+
+  # Close the widget
+  close_widget
+}
+
+# Handle passed arguments
+case "$1" in
+"--start-record")
+  start_record
+  ;;
+"--stop-record")
+  stop_record
+  ;;
+*)
+  # Display usage if no valid argument is provided
+  echo "Usage: $0 {--start-record|--stop-record}"
+  exit 1
+  ;;
+esac

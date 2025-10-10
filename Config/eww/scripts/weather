@@ -1,0 +1,77 @@
+#!/bin/sh
+# A script for eww to fetch and display weather information from wttr.in.
+# Maintained by humanwhodebugs
+
+# City for which to fetch weather data
+CITY="Kuala-Kapuas"
+
+# Function: Determines a weather icon based on the weather description string.
+# - Takes a weather description as its first argument.
+# - Returns a single character icon.
+get_weather_icon() {
+  case $(echo "$1" | tr '[:upper:]' '[:lower:]') in
+  *sunny* | *clear*)
+    echo "" # Sunny/Clear
+    ;;
+  *partly*cloudy*)
+    echo "" # Partly Cloudy
+    ;;
+  *cloudy*)
+    echo "" # Cloudy
+    ;;
+  *overcast*)
+    echo "" # Overcast
+    ;;
+  *rain* | *shower*)
+    echo "" # Rain/Showers
+    ;;
+  *storm* | *thunder*)
+    echo "" # Storm/Thunder
+    ;;
+  *snow*)
+    echo "" # Snow
+    ;;
+  *mist* | *fog*)
+    echo "" # Mist/Fog
+    ;;
+  *)
+    echo "?" # Default icon
+    ;;
+  esac
+}
+
+# Function: Fetches, parses, and formats weather data into a JSON object.
+# - Fetches data from wttr.in for the specified CITY.
+# - Parses JSON response using jq.
+# - Calls get_weather_icon to determine the correct icon.
+# - Echoes the final JSON string for EWW.
+generate_json() {
+  # Fetch the weather data from wttr.in
+  WEATHER_DATA=$(curl -s "https://wttr.in/${CITY}?format=j1")
+
+  # If curl failed, exit gracefully
+  if [ $? -ne 0 ]; then
+    echo '{"icon": "!", "desc": "N/A"}'
+    exit 1
+  fi
+
+  # Extract the current condition object
+  CURRENT_CONDITION=$(echo "$WEATHER_DATA" | jq -r '.current_condition[0]')
+
+  # Extract specific details from the condition object
+  TEMP_C=$(echo "$CURRENT_CONDITION" | jq -r '.temp_C')
+  WEATHER_DESC=$(echo "$CURRENT_CONDITION" | jq -r '.weatherDesc[0].value')
+  FEELS_LIKE_C=$(echo "$CURRENT_CONDITION" | jq -r '.FeelsLikeC')
+  HUMIDITY=$(echo "$CURRENT_CONDITION" | jq -r '.humidity')
+
+  # Get the corresponding weather icon
+  WEATHER_ICON=$(get_weather_icon "$WEATHER_DESC")
+
+  # Format the output as a JSON object for EWW
+  echo "{\"icon\": \"$WEATHER_ICON\", \"temp\": \"$TEMP_C\", \"desc\": \"$WEATHER_DESC\", \"city\": \"$CITY\", \"feels_like\": \"$FEELS_LIKE_C\", \"humidity\": \"$HUMIDITY%\"}"
+}
+
+# Main execution
+generate_json
+
+exit 0

@@ -1,0 +1,115 @@
+#	 ▄▄▄▄        █    ██  ███▄    █   ██████ ▄▄▄█████▓ ██▀███   ▄████▄
+#	▓█████▄     ██  ▓██▒ ██ ▀█   █ ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒▒██▀ ▀█
+#	▒██▒ ▄██   ▓██  ▒██░▓██  ▀█ ██▒░ ▓██▄   ▒ ▓██░ ▒░▓██ ░▄█ ▒▒▓█    ▄
+#	▒██   ░█▀  ▓▓█  ░██░▓██▒  ▐▌██▒  ▒   ██▒░ ▓██▓ ░ ▒██▀▀█▄  ▒▓▓▄ ▄██▒
+#	░▓█  ▀█▓   ▒▒█████▓ ▒██░   ▓██░▒██████▒▒  ▒██▒ ░ ░██▓ ▒██▒▒ ▓███▀ ░
+#	░▒▓███▀▒   ░▒▓▒ ▒ ▒ ░ ▒░   ▒ ▒ ▒ ▒▓▒ ▒ ░  ▒ ░░   ░ ▒▓ ░▒▓░░ ░▒ ▒  ░
+#	▒░▒   ░    ░░▒░ ░ ░ ░ ░░   ░ ▒░░ ░▒  ░ ░    ░      ░▒ ░ ▒░  ░  ▒
+#	 ░    ░     ░░░ ░ ░    ░   ░ ░ ░  ░  ░    ░        ░░   ░ ░
+#	 ░            ░              ░       ░              ░     ░ ░
+#	      ░                                                   ░
+
+;; Created   by https://github.com/humanwhodebugs
+;; Designed  by https://github.com/humanwhodebugs
+;; Maintaned by https://github.com/humanwhodebugs
+
+[global]
+    # Display settings
+    monitor = 0
+    follow = none
+
+    # Geometry
+    width = 0
+    height = (0, 0)
+    origin = top-right
+    offset = (10, 10)
+    notification_limit = 20
+
+    # Progress bar
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 300
+    progress_bar_corner_radius = 6
+
+    # Scripts
+    script = /home/rei/.config/dunst/scripts/logger.sh
+
+    # Visual settings
+    indicate_hidden = yes
+    transparency = 0
+    separator_height = 10
+    padding = 8
+    horizontal_padding = 8
+    frame_width = 0
+    gap_size = 10
+    separator_color = frame
+    sort = yes
+    corner_radius = 6
+    corners = all
+
+    # Text settings
+    font = Iosevka Term Medium 10
+    line_height = 0
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = start
+    ignore_newline = no
+
+    # Notifications behavior
+    stack_duplicates = true
+    hide_duplicate_count = true
+    show_indicators = yes
+
+    # Icons
+    enable_recursive_icon_lookup = true
+    icon_theme = Papirus
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 96
+
+    # History
+    sticky_history = yes
+    history_length = 20
+
+    # Applications
+    dmenu = /usr/bin/dmenu -p dunst:
+    browser = /usr/bin/xdg-open
+
+    # Mouse actions
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+# Catppuccin Latte theme
+[urgency_low]
+    background = "#acb0be"
+    foreground = "#4c4f69"
+    frame_color = "#4c4f69"
+    highlight = "#4c4f69"
+    timeout = 10
+    default_icon = dialog-information
+
+[urgency_normal]
+    background = "#acb0be"
+    foreground = "#4c4f69"
+    frame_color = "#4c4f69"
+    highlight = "#e6e9ef"
+    timeout = 10
+    override_pause_level = 30
+    default_icon = dialog-information
+
+[urgency_critical]
+    background = "#acb0be"
+    foreground = "#4c4f69"
+    frame_color = "#d20f39"
+    highlight = "#d20f39"
+    timeout = 0
+    override_pause_level = 60
+    default_icon = dialog-warning
+
+# vim: ft=cfg

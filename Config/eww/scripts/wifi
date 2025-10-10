@@ -1,0 +1,28 @@
+#!/bin/sh
+# A script to get WiFi connection status information for eww widgets
+# Maintained by humanwhodebugs
+
+# Function: Get WiFi connection symbol (returns empty if disconnected)
+symbol() {
+  if [ $(cat /sys/class/net/w*/operstate) = down ]; then
+    echo 󰤯
+    exit 0
+  fi
+  echo 󰤨
+}
+
+# Function: Get the name of the connected WiFi network
+name() {
+  nmcli | grep "^wlp" | sed 's/\ connected\ to\ /Connected to /g' | cut -d ':' -f2
+}
+
+# Handle passed arguments
+if [ "$1" = "icon" ]; then
+  # Return WiFi connection symbol
+  symbol
+  exit 0
+elif [ "$1" = "name" ]; then
+  # Return WiFi network name
+  name
+  exit 0
+fi
