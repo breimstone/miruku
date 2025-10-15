@@ -21,7 +21,7 @@ install_packages() {
 echo "╭─────────────────────────────╮"
 echo "│ Installing Starter Packages │"
 echo "╰─────────────────────────────╯"
-install_packages "Starter Packages" bspwm sxhkd ranger kitty imagemagick sddm xorg firefox rofi dunst brightnessctl pavucontrol pulseaudio picom feh cava fuse fastfetch cheese zathura zathura-pdf-poppler papirus-folders-catppuccin-git nwg-look zsh task
+install_packages "Starter Packages" bspwm sxhkd ranger kitty imagemagick sddm xorg firefox rofi dunst brightnessctl pavucontrol pulseaudio picom feh cava fuse fastfetch cheese zathura zathura-pdf-poppler papirus-folders-catppuccin-git nwg-look zsh task bluez bluez-utils pulseaudio-bluetooth
 
 echo "╭─────────────────────────────╮"
 echo "│ Installing EWW Dependencies │"
