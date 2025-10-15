@@ -87,6 +87,15 @@ systemctl --user start mpd.service
 
 echo "MPD setup completed!"
 
+echo "╭──────────────────────╮"
+echo "│ Setting up Bluetooth │"
+echo "╰──────────────────────╯"
+
+echo "Enabling bluetooth service"
+systemctl enable bluetooth.service
+echo "Starting bluetooth service"
+systemctl start bluetooth.service
+
 echo "╭────────────────────────────────────────────────────────────────╮"
 echo "│ All packages, dependencies and plugins installed successfully! │"
 echo "│                     Enjoy your system!                         │"
