@@ -43,7 +43,7 @@ clone_repo() {
 echo "╭──────────────────────────────╮"
 echo "│ Installing Development Tools │"
 echo "╰──────────────────────────────╯"
-install_packages "Development Tools" joplin neovim lazygit httpie tmux zsh-theme-powerlevel10k-git texlive-basic texlive-latex texlive-latexrecommended texlive-latexextra texlive-fontsrecommended
+install_packages "Development Tools" neovim lazygit httpie tmux zsh-theme-powerlevel10k-git texlive-basic texlive-latex texlive-latexrecommended texlive-latexextra texlive-fontsrecommended
 
 echo "╭─────────────╮"
 echo "│ Cloning TPM │"
