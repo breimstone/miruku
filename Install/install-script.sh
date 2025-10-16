@@ -51,7 +51,7 @@ install_packages "Screenshot Dependencies" maim xclip viewnior ffmpeg
 echo "╭────────────────────────────╮"
 echo "│ Installing MPD and NCMPCPP │"
 echo "╰────────────────────────────╯"
-install_packages "MPD and NCMPCPP" mpd ncmpcpp mpc mpv-mpris fum-bin
+install_packages "MPD and NCMPCPP" mpd ncmpcpp mpc mpv-mpris
 
 echo "╭──────────────────────╮"
 echo "│ Copying Config Files │"
