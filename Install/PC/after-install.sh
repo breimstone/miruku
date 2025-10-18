@@ -48,7 +48,7 @@ install_packages "Development Tools" neovim lazygit httpie tmux zsh-theme-powerl
 echo "╭───────────────────╮"
 echo "│ Installing Extras │"
 echo "╰───────────────────╯"
-install_packages "Extras" ani-cli yt-dlp
+install_packages "Extras" ani-cli legcord-bin yt-dlp
 
 echo "╭─────────────╮"
 echo "│ Cloning TPM │"
