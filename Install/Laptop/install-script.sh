@@ -53,11 +53,6 @@ echo "│ Installing MPD and NCMPCPP │"
 echo "╰────────────────────────────╯"
 install_packages "MPD and NCMPCPP" mpd ncmpcpp mpc
 
-echo "╭───────────────────────────────╮"
-echo "│ Installing Ani-CLI and YT-DLP │"
-echo "╰───────────────────────────────╯"
-install_packages "MPD and NCMPCPP" ani-cli yt-dlp
-
 echo "╭──────────────────────╮"
 echo "│ Copying Config Files │"
 echo "╰──────────────────────╯"

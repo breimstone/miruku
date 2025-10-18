@@ -45,6 +45,11 @@ echo "│ Installing Development Tools │"
 echo "╰──────────────────────────────╯"
 install_packages "Development Tools" neovim lazygit httpie tmux zsh-theme-powerlevel10k-git
 
+echo "╭───────────────────╮"
+echo "│ Installing Extras │"
+echo "╰───────────────────╯"
+install_packages "Extras" ani-cli yt-dlp
+
 echo "╭─────────────╮"
 echo "│ Cloning TPM │"
 echo "╰─────────────╯"
